@@ -1,0 +1,6 @@
+.idea/
+out/
+target/
+target/classes/com/ndn/algorithm/TienLenGame.class
+target/classes/com/ndn/base/Player.class
+target/classes/com/ndn/base/Reward.class
