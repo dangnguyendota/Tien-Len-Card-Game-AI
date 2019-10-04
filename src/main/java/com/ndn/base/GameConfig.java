@@ -11,5 +11,7 @@ public class GameConfig {
     public static final double QUAD_SEQUENCE = 0.22;
     public static final double QUAD = 0.16;
 
+    public static final double PLY_FACTOR = 0.005;
+
     public static final int LATE_CARDS = 6;
 }

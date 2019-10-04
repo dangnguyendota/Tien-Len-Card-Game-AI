@@ -22,6 +22,7 @@ public class TienLenGame implements Game {
     private GameConfiguration configuration;
     private boolean first = false;
     private boolean end = false;
+    private int ply;
 
     public TienLenGame(GameConfiguration configuration) {
         this.maxPlayer = configuration.maxPlayer;
@@ -35,10 +36,12 @@ public class TienLenGame implements Game {
         this.players = new Player[maxPlayer];
         this.scanned = false;
         this.first = configuration.first_turn;
+        this.ply = 0;
     }
 
     @Override
     public void move(BaseObject object) {
+        this.ply++;
         if(first) first = false;
         if (object instanceof Pass) {
             if (currentPlayer == previousPlayer) throw new TLException("Current player can not pass");
@@ -158,7 +161,7 @@ public class TienLenGame implements Game {
         } else {
             if(configuration.using_heuristic) {
                 int winner = getWinner();
-                double total = 0;
+                double total = - this.ply * GameConfig.PLY_FACTOR;
                 for (Player player : players) total += player.getLosingScore();
                 for (int i = 0; i < maxPlayer; i++) {
                     if (i == winner) this.reward.setScore(i, 1 + total);

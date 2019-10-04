@@ -94,14 +94,14 @@ public class Play {
 //        player1Card = from("3♠, 3♦, 3♣, 3♥, 4♠, 4♦, 5♠, 5♦, 6♠, 6♦");
 //        player2Card = from("2♠");
 
-        player1Card = from("3♠, 4♠, 5♠, 6♠, A♠");
-        player2Card = from("6♥, A♣, 2♥");
+        player1Card = from("3♥, 3♣, 5♣, 5♥, 9♣, 9♥, K♣, K♥, 6♣");
+        player2Card = from("8♦, 9♦, 10♦, 10♥");
 
         /* config game */
         GameConfiguration gameConfiguration = new GameConfiguration();
         gameConfiguration.maxPlayer = 2;
         gameConfiguration.passed = new boolean[gameConfiguration.maxPlayer];
-        gameConfiguration.currentPlayer = 1;
+        gameConfiguration.currentPlayer = 0;
         gameConfiguration.previousPlayer = gameConfiguration.currentPlayer;
         gameConfiguration.lastDealt = null;
         gameConfiguration.gang_beat = false;
@@ -138,7 +138,7 @@ public class Play {
             MctsPlayerConfiguration configuration = new MctsPlayerConfiguration();
 //            configuration.iterations = 1000000000;
 //            configuration.C = Math.sqrt(2);
-//            configuration.debug = true;
+            configuration.debug = true;
 //            configuration.usingK = true;
             configuration.minTime = 500;
             configuration.maxTime = 1000;
