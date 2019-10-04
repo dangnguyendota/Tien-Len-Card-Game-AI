@@ -91,5 +91,7 @@ public interface Game extends Serializable {
     void setConfig(GameConfiguration config);
 
     Player getPlayer(int index);
+
+    boolean isPassed(int index);
 }
 

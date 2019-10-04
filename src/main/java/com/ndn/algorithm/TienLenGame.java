@@ -229,6 +229,11 @@ public class TienLenGame implements Game {
     }
 
     @Override
+    public boolean isPassed(int index) {
+        return passed[index];
+    }
+
+    @Override
     public String toString() {
         StringBuilder info = new StringBuilder("Game Info:\n");
         info.append("last dealt: ").append(this.lastDealt).append("\n");

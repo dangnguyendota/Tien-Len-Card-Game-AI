@@ -94,8 +94,8 @@ public class Play {
 //        player1Card = from("3♠, 3♦, 3♣, 3♥, 4♠, 4♦, 5♠, 5♦, 6♠, 6♦");
 //        player2Card = from("2♠");
 
-        player2Card = from("J♥, 2♣");
-        player1Card = from("3♣, 5♠, 5♦, 6♠, 6♣, 6♦, 7♣, 7♦, Q♠, Q♦, A♣, A♦, 2♦");
+        player1Card = from("3♠, 4♠, 5♠, 6♠, A♠");
+        player2Card = from("6♥, A♣, 2♥");
 
         /* config game */
         GameConfiguration gameConfiguration = new GameConfiguration();
@@ -136,12 +136,12 @@ public class Play {
             Game game = createGame();
             /* config bot */
             MctsPlayerConfiguration configuration = new MctsPlayerConfiguration();
-            configuration.iterations = 1000000000;
-            configuration.C = Math.sqrt(2);
-            configuration.debug = true;
-            configuration.usingK = true;
-            configuration.minTime = 2000;
-            configuration.maxTime = 7000;
+//            configuration.iterations = 1000000000;
+//            configuration.C = Math.sqrt(2);
+//            configuration.debug = true;
+//            configuration.usingK = true;
+            configuration.minTime = 500;
+            configuration.maxTime = 1000;
             /* create bot */
             MonteCarloTreeSearchPlayer bot = new MonteCarloTreeSearchPlayer();
             /* search */

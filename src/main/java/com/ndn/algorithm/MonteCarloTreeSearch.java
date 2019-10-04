@@ -7,28 +7,55 @@ import java.util.ArrayList;
 
 class MonteCarloTreeSearch {
 
-    BaseObject selectMove(Game game, MctsPlayerConfiguration configuration){
+    private boolean containsNoSet(ArrayList<BaseObject> objects) {
+        for (BaseObject object : objects) {
+            if (object instanceof Card) continue;
+            return false;
+        }
+        return true;
+    }
+
+    private BaseObject getReducedMove(Game game) {
+        ArrayList<BaseObject> list = game.getAvailableMoves();
+        boolean no_set = containsNoSet(list);
+        if (!no_set) return null;
+        if (game.getCurrentPlayer().listAvailableMoves().size() != list.size()) return null;
+        if (list.size() == 1) return list.get(0);
+
+        for (int i = 0; i < game.getMaxPlayer(); i++) {
+            if (i == game.getCurrentPlayerIndex() || game.isPassed(i)) continue;
+            if (game.getPlayer(i).listAvailableMovesToAgainst(list.get(1)).size() != 0) {
+                return null;
+            }
+        }
+        return list.get(1);
+    }
+
+    BaseObject selectMove(Game game, MctsPlayerConfiguration configuration) {
         int iterations = configuration.iterations;
         /* check must move */
         ArrayList<BaseObject> list = game.getAvailableMoves();
-        if(list.size() == 0) return new Pass();
+        if (list.size() == 0) return new Pass();
+        // heuristic for reduction
+        BaseObject object = getReducedMove(game);
+        if (object != null) return object;
         /* algorithm */
         Node root = new TienLenNode(null, null, -1, game);
         root.setC(configuration.C);
         root.setK(configuration.K);
-        if(configuration.usingK) root.usingK();
+        if (configuration.usingK) root.usingK();
         long start = System.currentTimeMillis();
         int count = 0;
-        while (iterations > 0 && System.currentTimeMillis() - start < configuration.maxTime){
+        while (iterations > 0 && System.currentTimeMillis() - start < configuration.maxTime) {
             iterations--;
             /* keep playing while the ratio of winning is less than 50% */
-            if(System.currentTimeMillis() - start > configuration.minTime){
+            if (System.currentTimeMillis() - start > configuration.minTime) {
                 double x = 0, y = 0;
-                for(int i = 0; i < game.getMaxPlayer(); i++){
-                    if(i == game.getCurrentPlayerIndex()) x = root.getReward().getScoreForPlayer(i);
+                for (int i = 0; i < game.getMaxPlayer(); i++) {
+                    if (i == game.getCurrentPlayerIndex()) x = root.getReward().getScoreForPlayer(i);
                     else y = Math.max(y, root.getReward().getScoreForPlayer(i));
                 }
-                if(x > y) break;
+                if (x > y) break;
             }
 
             /* continue loop */
@@ -40,7 +67,7 @@ class MonteCarloTreeSearch {
             count++;
         }
         /* debug */
-        if(configuration.debug){
+        if (configuration.debug) {
             System.out.println("MCTS iterations count: " + count + ", reward: " + root.getReward() + ", visited: " + root.getVisit() + ", thinking time: " + (System.currentTimeMillis() - start));
             root.printChildren();
         }
