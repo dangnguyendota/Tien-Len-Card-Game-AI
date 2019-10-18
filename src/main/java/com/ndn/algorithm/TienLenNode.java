@@ -52,7 +52,28 @@ public class TienLenNode implements Node {
                         this.unexploredMoves.add(new Pass());
                     }
                 }
+
+                if(parent == null) removeUnintelligibleMoves(game);
             }
+        }
+    }
+
+    private void removeUnintelligibleMoves(Game game) {
+        ArrayList<BaseObject> rmList = new ArrayList<>();
+        boolean containsTwo = false;
+        for(BaseObject o : this.unexploredMoves) {
+            if(!containsTwo && (o instanceof Card)) {
+                if(((Card) o).getValue() == Card.TWO) containsTwo = true;
+            }
+
+            if(o instanceof Quads || o instanceof QuadSequence || o instanceof TripSequence) {
+                rmList.add(o);
+            }
+        }
+
+        if(!containsTwo) return;
+        for(BaseObject o : rmList) {
+            this.unexploredMoves.remove(o);
         }
     }
 
