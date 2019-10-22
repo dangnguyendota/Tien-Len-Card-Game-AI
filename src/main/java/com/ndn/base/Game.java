@@ -93,5 +93,7 @@ public interface Game extends Serializable {
     Player getPlayer(int index);
 
     boolean isPassed(int index);
+
+    BaseObject getLastDealt();
 }
 

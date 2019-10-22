@@ -15,6 +15,7 @@ class MonteCarloTreeSearch {
         return true;
     }
 
+    // nếu bộ còn toàn cóc lẻ và bên kia không chặn được con cóc lẻ nào thì đánh lần lượt từ thấp lên cao
     private BaseObject getReducedMove(Game game) {
         ArrayList<BaseObject> list = game.getAvailableMoves();
         boolean no_set = containsNoSet(list);

@@ -94,14 +94,14 @@ public class Play {
 //        player1Card = from("3♠, 3♦, 3♣, 3♥, 4♠, 4♦, 5♠, 5♦, 6♠, 6♦");
 //        player2Card = from("2♠");
 
-        player2Card = from("3♠, 3♦, 3♣, 3♥, 2♠");
-        player1Card = from("5♥");
+        player1Card = from("2♠, 8♦, 3♣");
+        player2Card = from("4♠, 4♦, 5♠, 5♦, 6♠, 6♦, 7♦, Q♠");
 
         /* config game */
         GameConfiguration gameConfiguration = new GameConfiguration();
         gameConfiguration.maxPlayer = 2;
         gameConfiguration.passed = new boolean[gameConfiguration.maxPlayer];
-        gameConfiguration.currentPlayer = 1;
+        gameConfiguration.currentPlayer = 0;
         gameConfiguration.previousPlayer = gameConfiguration.currentPlayer;
         gameConfiguration.lastDealt = null;
         gameConfiguration.gang_beat = false;

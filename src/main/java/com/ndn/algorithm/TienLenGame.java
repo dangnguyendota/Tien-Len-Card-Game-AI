@@ -237,6 +237,11 @@ public class TienLenGame implements Game {
     }
 
     @Override
+    public BaseObject getLastDealt(){
+        return lastDealt;
+    }
+
+    @Override
     public String toString() {
         StringBuilder info = new StringBuilder("Game Info:\n");
         info.append("last dealt: ").append(this.lastDealt).append("\n");

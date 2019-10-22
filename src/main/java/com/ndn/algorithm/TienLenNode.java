@@ -53,12 +53,69 @@ public class TienLenNode implements Node {
                     }
                 }
 
-                if(parent == null) removeUnintelligibleMoves(game);
+                if(parent == null) {
+                    removeUnintelligibleMoves();
+                    checkForBeatingTwo(game);
+                }
             }
         }
     }
 
-    private void removeUnintelligibleMoves(Game game) {
+    private static boolean hasTripSeqOrQuadSeqOrQuad(ArrayList<BaseObject> list){
+        for(BaseObject o : list) {
+            if(o instanceof TripSequence || o instanceof QuadSequence || o instanceof Quads) return true;
+        }
+        return false;
+    }
+
+    private void removePass(){
+        for(int i = 0; i < this.unexploredMoves.size(); i++) {
+            if(this.unexploredMoves.get(i) instanceof Pass) {
+                this.unexploredMoves.remove(i);
+                break;
+            }
+        }
+    }
+
+    // luôn đánh tứ quý, 3 hoặc 4 đôi thông nếu người chơi đánh 2
+    private void checkForBeatingTwo(Game game){
+        if(!game.getLastDealt().contains(Card.TWO)) return;
+//        ArrayList<BaseObject> list = game.getAvailableMoves();
+        // nếu bot đánh đôi 2, hoặc tam 2 mà chặn được thì chặn luôn
+        if(game.getLastDealt().getCards().length >= 2 && this.unexploredMoves.size() >= 2) {
+            removePass();
+            return;
+        }
+        //nếu bot đánh 1 con 2 lẻ
+        if(game.getLastDealt().getCards().length == 1) {
+            if(!hasTripSeqOrQuadSeqOrQuad(this.unexploredMoves)) return;
+            ArrayList<BaseObject> previousPlayerListMoves = game.getPlayer(game.getPreviousPlayerIndex()).listAvailableMoves();
+            boolean containsTwo = false;
+            for(BaseObject o : previousPlayerListMoves) {
+                if(o instanceof Card && ((Card) o).getValue() == Card.TWO) {
+                    containsTwo = true;
+                    break;
+                }
+            }
+
+            // nếu người chơi trước không còn 2 thì chặn luôn
+            if(!containsTwo) {
+                removePass();
+                return;
+            }
+
+            // nếu người chơi trước có 2 thì 100% chặn nếu con vừa đánh là 2 đỏ và 90% chặn nếu là 2 đen
+            Card card = game.getLastDealt().getCards()[0];
+            if(card.getType() == Card.HEART || card.getType() == Card.DIAMOND) {
+                removePass();
+            } else {
+                if(DangNguyenDota.random.nextInt(10) > 1) removePass();
+            }
+        }
+    }
+
+    // Nếu đánh được 2 thì không được đánh tứ quý, 3 hoặc 4 đôi thông trước.
+    private void removeUnintelligibleMoves() {
         ArrayList<BaseObject> rmList = new ArrayList<>();
         boolean containsTwo = false;
         for(BaseObject o : this.unexploredMoves) {
@@ -77,6 +134,7 @@ public class TienLenNode implements Node {
         }
     }
 
+    // không cho tự  dưngđánh mấy bộ 3, 4 đôi thông và 2 một cách vô lý trước
     private void removeUnnecessaryMoves(Game game){
         GameConfiguration conf = game.getConfig();
         for(int i = 0; i < conf.maxPlayer; i++){
