@@ -80,8 +80,8 @@ public class Play {
         player3Card = new ArrayList<>(Arrays.asList(tmp3));
         player4Card = new ArrayList<>(Arrays.asList(tmp4));
 
-//        player1Card = from("2♥, 3♥, 2♣, 4♥, 5♥, 6♣, 7♣, 8♠, J♦, 9♦, 10♠, K♣, Q♥");
-//        player2Card = from("10♥, 10♦, K♦, K♥, Q♠, A♦, 9♥");
+        player1Card = from("2♥, 3♥, 2♣, 4♥, 5♥, 6♣, 7♣, 8♠, J♦, 9♦, 10♠, K♣, Q♥");
+        player2Card = from("10♥, 10♦, K♦, K♥, Q♠, A♦, 9♥");
 
 //        player1Card = from("2♣, 3♣, 9♦, K♠, A♦");
 //        player2Card = from("3♦, 3♥, 3♠, 2♦, 8♣, A♣, J♥, 10♣, 6♥");
@@ -93,15 +93,15 @@ public class Play {
 
 //        player1Card = from("3♠, 3♦, 3♣, 3♥, 4♠, 4♦, 5♠, 5♦, 6♠, 6♦");
 //        player2Card = from("2♠");
-
-        player1Card = from("2♠, 8♦, 3♣");
-        player2Card = from("4♠, 4♦, 5♠, 5♦, 6♠, 6♦, 7♦, Q♠");
+//
+//        player1Card = from("2♣, 2♥, 3♣");
+//        player2Card = from("4♠, 4♦, 5♠, 5♦, 6♠, 6♦, 2♦");
 
         /* config game */
         GameConfiguration gameConfiguration = new GameConfiguration();
         gameConfiguration.maxPlayer = 2;
         gameConfiguration.passed = new boolean[gameConfiguration.maxPlayer];
-        gameConfiguration.currentPlayer = 0;
+        gameConfiguration.currentPlayer = 1;
         gameConfiguration.previousPlayer = gameConfiguration.currentPlayer;
         gameConfiguration.lastDealt = null;
         gameConfiguration.gang_beat = false;

@@ -107,7 +107,6 @@ public class TienLenPlayer implements Player {
         list.addAll(Arrays.asList(finder.scan(cards, TripSequence.class)));
         list.addAll(Arrays.asList(finder.scan(cards, Quads.class)));
         list.addAll(Arrays.asList(finder.scan(cards, QuadSequence.class)));
-
         for (int i = 0; i < list.size(); i++) {
             BaseObject o = list.get(i);
             /* connector */

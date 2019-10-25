@@ -79,6 +79,7 @@ public class TienLenNode implements Node {
 
     // luôn đánh tứ quý, 3 hoặc 4 đôi thông nếu người chơi đánh 2
     private void checkForBeatingTwo(Game game){
+        if(game.getLastDealt() == null) return;
         if(!game.getLastDealt().contains(Card.TWO)) return;
 //        ArrayList<BaseObject> list = game.getAvailableMoves();
         // nếu bot đánh đôi 2, hoặc tam 2 mà chặn được thì chặn luôn
@@ -243,7 +244,6 @@ public class TienLenNode implements Node {
 
     @Override
     public void printTree(String space) {
-        System.out.println(space + " visit " + visit + ", reward " + reward + ", move " + move + ", current player " + currentPlayIndex + ", children " + children.size() + ", unexplored  " + unexploredMoves);
         for (Node child : children) {
             child.printTree(space + "    |");
         }

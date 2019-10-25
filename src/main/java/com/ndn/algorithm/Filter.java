@@ -43,7 +43,6 @@ class Filter {
             same = findSequences(same);
             out.addAll(same);
         }
-
         return out.toArray(new BaseObject[0]);
     }
 
@@ -62,7 +61,7 @@ class Filter {
         return found;
     }
 
-    static BaseObject[] removeUnnecessaryTrips(BaseObject[] trips){
+    static BaseObject[] removeUnnecessaryTrips(BaseObject[] trips) {
         boolean[] checked = new boolean[trips.length];
         ArrayList<BaseObject> out = new ArrayList<>();
 
@@ -75,7 +74,7 @@ class Filter {
                 Trips s = (Trips) trips[j];
                 if (s.getValue() != smin.getValue()) continue;
                 checked[j] = true;
-                if(s.getValue() < smin.getValue()) smin = s;
+                if (s.getValue() < smin.getValue()) smin = s;
             }
             out.add(smin);
         }
