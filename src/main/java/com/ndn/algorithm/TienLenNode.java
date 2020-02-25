@@ -7,6 +7,7 @@ import com.ndn.objects.QuadSequence;
 import com.ndn.objects.Quads;
 import com.ndn.objects.TripSequence;
 import com.ndn.util.DangNguyenDota;
+import org.rapidoid.commons.Arr;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -56,6 +57,11 @@ public class TienLenNode implements Node {
                 if(parent == null) {
                     removeUnintelligibleMoves();
                     checkForBeatingTwo(game);
+                    removeTwoIfNotBeatingTurn(game);
+                    if (removePassIfBeatingCardTurn(game)) {
+                        removePass();
+                    }
+
                 }
             }
         }
@@ -74,6 +80,65 @@ public class TienLenNode implements Node {
                 this.unexploredMoves.remove(i);
                 break;
             }
+        }
+    }
+
+    // nếu là chặn con lẻ mà còn con lẻ ko có trong bộ nào thì phải đánh lẻ
+    private boolean removePassIfBeatingCardTurn(Game game) {
+        ArrayList<BaseObject> l = game.getCurrentPlayer().listAvailableMoves();
+        if(game.getLastDealt() != null && game.getLastDealt() instanceof Card) {
+            Loop: for(BaseObject o : this.unexploredMoves) {
+                if(o instanceof Card) {
+                    for(BaseObject oo : l) {
+                        if (!(oo instanceof Card) && oo.contains((Card) o)) {
+                            continue Loop;
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Card getCardWithNearlyLeastValueAvailable(){
+        Card card = null;
+        int count = 0;
+        Loop: for(BaseObject o : this.unexploredMoves) {
+            if(o instanceof Card) {
+                for(BaseObject _o : this.unexploredMoves) {
+                    if(_o.equals(o)) continue;
+                    if(_o.contains((Card) o)) continue Loop;
+                }
+                count++;
+                if(count == 2) {
+                    card = (Card) o;
+                    break;
+                }
+            }
+        }
+
+        return card;
+    }
+
+    //loại trường hợp đánh 2 trước con lẻ nếu không phải turn chặn
+    private void removeTwoIfNotBeatingTurn(Game game){
+        if(game.getLastDealt() != null) return;
+        for(int i = 0; i < game.getMaxPlayer(); i++) {
+            if(i == game.getCurrentPlayerIndex()) continue;
+            // có người còn 1 là thì ko được remove 2
+            if(game.getPlayer(i).listAvailableMoves().size() == 1) return;
+        }
+
+        Card card = getCardWithNearlyLeastValueAvailable();
+        if(card == null || card.getValue() == Card.TWO) return;
+        ArrayList<BaseObject> rmList = new ArrayList<>();
+        for(BaseObject o : this.unexploredMoves) {
+            if(o.contains(Card.TWO)) rmList.add(o);
+        }
+
+        for(BaseObject o : rmList) {
+            this.unexploredMoves.remove(o);
         }
     }
 
@@ -118,6 +183,7 @@ public class TienLenNode implements Node {
     // Nếu đánh được 2 thì không được đánh tứ quý, 3 hoặc 4 đôi thông trước.
     private void removeUnintelligibleMoves() {
         ArrayList<BaseObject> rmList = new ArrayList<>();
+        ArrayList<BaseObject> rm2List = new ArrayList<>();
         boolean containsTwo = false;
         for(BaseObject o : this.unexploredMoves) {
             if(!containsTwo && (o instanceof Card)) {
@@ -127,6 +193,14 @@ public class TienLenNode implements Node {
             if(o instanceof Quads || o instanceof QuadSequence || o instanceof TripSequence) {
                 rmList.add(o);
             }
+
+            if(o.contains(Card.TWO) && !(o instanceof Card)) {
+                rm2List.add(o);
+            }
+        }
+
+        if (rm2List.size() < this.unexploredMoves.size() - 1) {
+            this.unexploredMoves.removeAll(rm2List);
         }
 
         if(!containsTwo) return;

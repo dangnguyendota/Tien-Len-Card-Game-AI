@@ -65,6 +65,40 @@ public class Play {
         return out.toArray(new Card[0]);
     }
 
+    public static int setCase(int c) {
+        switch (c){
+            case 1:
+                player2Card = from("Q♦, Q♥, 2♦, 9♦"); // bot
+                player1Card = from("6♥, K♥"); // user
+                return 0; // user first
+            case 2:
+                player2Card = from("6♦, 7♥, 2♦, 8♦"); // bot
+                player1Card = from("3♦, 4♥, 5♦, 6♥, 8♦, 9♥, 10♦, J♥, Q♦, K♥"); // user
+                return 1; // bot first
+            case 3:
+                player2Card = from("10♦, J♥, Q♦, 2♥, 2♦, 6♥"); // bot
+                player1Card = from("5♦, K♥, J♦"); // user
+                return 0; // user first
+            case 4:
+                player2Card = from("2♥, 6♥"); // bot
+                player1Card = from("3♥, 3♣, 4♦, 4♥, 5♦, 5♣, 2♣, Q♣"); // user
+                return 0; // user first
+            case 5:
+                player2Card = from("2♥, 2♦, 4♦, 9♦"); // bot
+                player1Card = from("10♣"); // user
+                return 1; // bot first
+            case 6:
+                player2Card = from("2♣, 2♠, Q♦, J♠, K♦"); // bot
+                player1Card = from("3♠, 4♦, 5♠, 9♥, 10♠, J♦, K♠, K♥, A♠, A♦, 2♦, 7♦"); // user
+                return 0; // user first
+            case 7:
+                player1Card = from("10♠, J♠, A♠, 2♠, 2♦"); // bot
+                player2Card = from("3♠, 3♥, K♠, K♥, Q♥, Q♠"); // user
+                return 1; // bot first
+        }
+        return -1;
+    }
+
     public static Game createGame() {
         Card[] deck = Card.deckOfCards();
         Card[] tmp1 = Card.randomCards(deck, 13);
@@ -80,8 +114,8 @@ public class Play {
         player3Card = new ArrayList<>(Arrays.asList(tmp3));
         player4Card = new ArrayList<>(Arrays.asList(tmp4));
 
-        player1Card = from("2♥, 3♥, 2♣, 4♥, 5♥, 6♣, 7♣, 8♠, J♦, 9♦, 10♠, K♣, Q♥");
-        player2Card = from("10♥, 10♦, K♦, K♥, Q♠, A♦, 9♥");
+//        player1Card = from("2♥, 3♥, 2♣, 4♥, 5♥, 6♣, 7♣, 8♠, J♦, 9♦, 10♠, K♣, Q♥");
+//        player2Card = from("10♥, 10♦, K♦, K♥, Q♠, A♦, 9♥");
 
 //        player1Card = from("2♣, 3♣, 9♦, K♠, A♦");
 //        player2Card = from("3♦, 3♥, 3♠, 2♦, 8♣, A♣, J♥, 10♣, 6♥");
@@ -93,15 +127,14 @@ public class Play {
 
 //        player1Card = from("3♠, 3♦, 3♣, 3♥, 4♠, 4♦, 5♠, 5♦, 6♠, 6♦");
 //        player2Card = from("2♠");
+
 //
-//        player1Card = from("2♣, 2♥, 3♣");
-//        player2Card = from("4♠, 4♦, 5♠, 5♦, 6♠, 6♦, 2♦");
 
         /* config game */
         GameConfiguration gameConfiguration = new GameConfiguration();
         gameConfiguration.maxPlayer = 2;
         gameConfiguration.passed = new boolean[gameConfiguration.maxPlayer];
-        gameConfiguration.currentPlayer = 1;
+        gameConfiguration.currentPlayer = setCase(7);;
         gameConfiguration.previousPlayer = gameConfiguration.currentPlayer;
         gameConfiguration.lastDealt = null;
         gameConfiguration.gang_beat = false;
@@ -114,9 +147,9 @@ public class Play {
         player4 = new TienLenPlayer();
 
         player1.setBot(false);
-        player2.setBot(true);
-        player3.setBot(true);
-        player4.setBot(true);
+        player2.setBot(false);
+        player3.setBot(false);
+        player4.setBot(false);
 
         player1.setCards(player1Card.toArray(new Card[0]));
         player2.setCards(player2Card.toArray(new Card[0]));
